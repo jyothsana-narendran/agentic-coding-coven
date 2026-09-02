@@ -1,0 +1,28 @@
+Senior Software Engineer
+
+Company: ABC Technologies
+
+We are looking for a Senior Software Engineer to join our
+backend engineering team.
+
+Responsibilities:
+
+- Design and develop scalable backend services.
+- Build distributed systems.
+- Collaborate with product and engineering teams.
+- Review code and mentor junior engineers.
+
+Requirements:
+
+- 5+ years of software engineering experience.
+- Strong Python programming skills.
+- Experience with C++ or Java.
+- Experience building distributed systems.
+- Bachelor's degree in Computer Science or a related field.
+
+Preferred:
+
+- Experience with AWS.
+- Kubernetes experience.
+- Experience working in a cloud environment.
+- Strong communication and problem-solving skills.
