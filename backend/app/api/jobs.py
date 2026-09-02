@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from ..dependencies import current_user_id
 from ..schemas import JobTargetCreate
-from backend.services.repository import repository
+from services.repository import repository
 router = APIRouter(prefix='/job-targets', tags=['jobs'])
 @router.post('', status_code=201)
 async def create_target(payload: JobTargetCreate, user_id: str = Depends(current_user_id)):

@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, File, HTTPException, UploadFile
 from ..dependencies import current_user_id
 from ..schemas import ProfileUpdate
 from ..services.storage import save_upload
-from backend.services.repository import repository
+from services.repository import repository
 
 router = APIRouter(prefix='/profile', tags=['profile'])
 @router.get('')

@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from ..dependencies import current_user_id
 from ..schemas import RecommendationUpdate
-from backend.services.repository import repository
+from services.repository import repository
 router = APIRouter(prefix='/recommendations', tags=['recommendations'])
 @router.get('')
 async def list_recommendations(user_id: str = Depends(current_user_id)):
