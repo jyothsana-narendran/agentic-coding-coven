@@ -5,7 +5,9 @@ from .career_profile_schema import CareerProfile
 
 class CareerProfileState(TypedDict, total=False):
     candidate_id: str
-    candidate_text: str
+
+    resume_text: str
+    linkedin_text: str
 
     career_profile: Optional[CareerProfile]
 

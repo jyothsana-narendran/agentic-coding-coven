@@ -33,7 +33,8 @@ def create_career_profile_agent(llm):
 
     def extract_profile(state: CareerProfileState):
         candidate_id = state["candidate_id"]
-        candidate_text = state["candidate_text"]
+        resume_text = state.get("resume_text", "")
+        linkedin_text = state.get("linkedin_text", "")
 
         user_prompt = f"""
 {prompts}
@@ -41,15 +42,31 @@ def create_career_profile_agent(llm):
 Candidate ID:
 {candidate_id}
 
-Candidate information:
+RESUME
 ----------------------
-{candidate_text}
+{resume_text}
 ----------------------
+
+LINKEDIN
+----------------------
+{linkedin_text}
+----------------------
+
+Extract the candidate's career profile from the provided sources.
+
+Preserve the source of each piece of evidence.
+
+Evidence source rules:
+- Use "resume" when the information comes from the resume.
+- Use "linkedin" when the information comes from LinkedIn.
+- Do not use generic source names such as "Provided resume".
+- If the same information appears in both sources, preserve evidence
+  from both sources when relevant.
+
+Do not hallucinate missing information.
+Do not assume that information appearing in one source appears in another.
 
 Return the information using the CareerProfile schema.
-
-Preserve evidence for extracted claims.
-Do not hallucinate missing information.
 """
 
         try:

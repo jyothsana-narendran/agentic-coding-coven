@@ -26,17 +26,27 @@ def main():
 
     agent = create_career_profile_agent(llm)
 
+    # Load resume
     with open(
         "ai/agents/career_profile/career_profile_test.txt",
         "r",
         encoding="utf-8",
     ) as file:
-        candidate_text = file.read()
+        resume_text = file.read()
+
+    # Load LinkedIn profile
+    with open(
+        "ai/agents/career_profile/career_profile_test_input2.txt",
+        "r",
+        encoding="utf-8",
+    ) as file:
+        linkedin_text = file.read()
 
     result = agent.invoke(
         {
             "candidate_id": "test_candidate_001",
-            "candidate_text": candidate_text,
+            "resume_text": resume_text,
+            "linkedin_text": linkedin_text,
         }
     )
 
@@ -58,4 +68,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-

@@ -1,0 +1,54 @@
+John Doe
+
+LinkedIn Headline:
+Software Engineer | Cloud & Distributed Systems | Building Reliable Developer Platforms
+
+About:
+Software Engineer interested in distributed systems, cloud infrastructure, and developer productivity. I enjoy designing reliable systems, simplifying complex engineering workflows, and working across engineering teams to improve how software is built and delivered.
+
+Experience:
+
+ABC Technologies
+Software Engineer
+2022 – 2025
+
+* Designed internal developer tooling that helped engineering teams standardize local development environments.
+* Worked with engineers across multiple teams to improve development workflows and reduce repetitive manual processes.
+* Participated in architecture discussions for backend and cloud-based systems.
+* Mentored junior engineers through code reviews, technical discussions, and onboarding.
+* Contributed to engineering documentation and internal technical standards.
+
+Technical Interests:
+Distributed Systems
+Cloud Architecture
+Developer Experience
+Developer Tooling
+System Design
+Backend Engineering
+Technical Mentoring
+
+Skills:
+Python
+FastAPI
+AWS
+Docker
+PostgreSQL
+Git
+CI/CD
+System Design
+Cloud Infrastructure
+Developer Experience
+
+Featured:
+Engineering Notes — Building Better Developer Workflows
+
+A collection of technical notes covering developer tooling, backend architecture, cloud infrastructure, and lessons learned from building internal engineering systems.
+
+Education:
+
+National University
+Bachelor of Science in Computer Science
+2018 – 2022
+
+Career Interests:
+Interested in backend engineering, cloud infrastructure, distributed systems, developer tooling, and technical leadership.
