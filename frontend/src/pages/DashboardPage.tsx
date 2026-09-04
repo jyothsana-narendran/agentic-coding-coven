@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
 import { StrategyListItem } from '../components/StrategyListItem'
 import { useWorkflow } from '../context/useWorkflow'
+import { getRecommendationCounts } from '../utils/recommendations'
 
 export function DashboardPage() {
   const { strategies, strategiesLoading } = useWorkflow()
-  const pending = strategies.reduce((total, strategy) => total + strategy.recommendations.recommendations.filter((item) => item.status === 'pending').length, 0)
+  const pending = strategies.reduce((total, strategy) => total + getRecommendationCounts(strategy).pending, 0)
 
   if (strategiesLoading) return <div className="dashboard page-width"><div className="dashboard-loading" aria-live="polite">Loading your job strategies…</div></div>
 

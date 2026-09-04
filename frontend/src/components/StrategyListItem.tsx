@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import type { JobStrategy } from '../types/domain'
+import { getRecommendationActions, getRecommendationCounts } from '../utils/recommendations'
 
 function relativeDate(value: string) {
   const days = Math.max(0, Math.floor((Date.now() - new Date(value).getTime()) / 86_400_000))
@@ -9,9 +10,10 @@ function relativeDate(value: string) {
 }
 
 export function StrategyListItem({ strategy }: { strategy: JobStrategy }) {
-  const items = strategy.recommendations.recommendations
-  const reviewed = items.filter((item) => item.status !== 'pending').length
-  const accepted = items.filter((item) => item.status === 'accepted').length
+  const items = getRecommendationActions(strategy.recommendations)
+  const counts = getRecommendationCounts(strategy)
+  const reviewed = counts.accepted + counts.rejected
+  const accepted = counts.accepted
   const description = strategy.target_profile.responsibilities[0]?.description ?? strategy.job_description
 
   return (
@@ -25,7 +27,7 @@ export function StrategyListItem({ strategy }: { strategy: JobStrategy }) {
         </div>
       </Link>
       <div className="strategy-metrics">
-        <div className="compact-score"><strong>{strategy.job_match.overall_score}%</strong><span>match</span></div>
+        <div className="compact-score"><strong>{strategy.job_match.match_score}%</strong><span>match</span></div>
         <div className="compact-progress">
           <span>{reviewed} of {items.length} reviewed</span>
           <div aria-hidden="true"><i style={{ width: `${items.length ? (reviewed / items.length) * 100 : 0}%` }} /></div>
@@ -36,4 +38,3 @@ export function StrategyListItem({ strategy }: { strategy: JobStrategy }) {
     </article>
   )
 }
-

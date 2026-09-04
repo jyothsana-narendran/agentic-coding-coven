@@ -2,7 +2,7 @@ import type {
   CareerProfile,
   JobMatch,
   JobStrategy,
-  Recommendations,
+  RecommendationResult,
   TargetProfile,
 } from '../types/domain'
 
@@ -82,75 +82,20 @@ export const mockTargetProfile: TargetProfile = {
 }
 
 export const mockJobMatch: JobMatch = {
-  overall_score: 76,
-  matched_skills: [
-    { skill: 'React', candidate_level: 'advanced', target_importance: 'critical', evidence: 'Led a React migration and shipped customer-facing workflows.' },
-    { skill: 'TypeScript', candidate_level: 'advanced', target_importance: 'critical', evidence: 'Used TypeScript across three product teams.' },
-    { skill: 'Python', candidate_level: 'intermediate', target_importance: 'high', evidence: 'Built Python services and a feedback analysis project.' },
-    { skill: 'AWS', candidate_level: 'intermediate', target_importance: 'medium', evidence: 'Deployed production services with Lambda and ECS.' },
-  ],
-  missing_skills: [
-    { skill: 'System design', importance: 'high', reason: 'Your experience implies architectural work, but the resume does not state your decisions or scale clearly.', recommended_action: 'Add one architecture example with constraints, decision, scale, and measurable result.' },
-    { skill: 'GraphQL', importance: 'medium', reason: 'The role lists GraphQL as preferred and it does not appear in your profile.', recommended_action: 'Build a small GraphQL API or identify adjacent API design experience.' },
-    { skill: 'Mentoring', importance: 'medium', reason: 'The role expects senior engineers to support team growth.', recommended_action: 'Add examples of onboarding, review, pairing, or technical leadership.' },
-  ],
-  strengths: [
-    { strength: 'Strong product engineering track record', evidence: 'You connect technical delivery to activation and performance outcomes.' },
-    { strength: 'Relevant modern web stack', evidence: 'Advanced React and TypeScript align with the role’s critical requirements.' },
-    { strength: 'Cross-functional delivery', evidence: 'Your profile shows close partnership with product and design.' },
-  ],
-  experience_gaps: ['The role requests 5+ years; your profile currently demonstrates about 4 years.', 'No explicit people-mentoring example is documented.'],
-  keyword_gaps: ['system design', 'GraphQL', 'mentoring', 'product strategy'],
+  match_score: 76,
+  strengths: ['Strong product engineering track record', 'Relevant modern web stack', 'Cross-functional delivery'],
+  skill_gaps: ['System design evidence is not explicit.', 'GraphQL does not appear in the profile.', 'Mentoring experience is not documented.'],
+  evidence: ['Led a React migration and shipped customer-facing workflows.', 'Used TypeScript across three product teams.', 'Built Python services and deployed production services with AWS.'],
+  recommendations: ['Add an architecture example with constraints, decisions, scale, and results.', 'Document onboarding, review, pairing, or technical leadership examples.'],
 }
 
-export const mockRecommendations: Recommendations = {
-  recommendations: [
-    {
-      id: 'rec_001', category: 'resume', priority: 'critical', title: 'Make your ownership and architecture work explicit',
-      current: 'Built workflow and analytics products for B2B teams.',
-      suggested: 'Owned architecture and delivery of B2B workflow products used by 40+ customer teams, partnering with product and design from discovery through launch.',
-      reason: 'The role prioritizes end-to-end ownership and system design, but your current summary understates both.',
-      evidence: [{ source: 'candidate_profile', text: 'Your experience shows product delivery but does not name architectural decisions.' }, { source: 'job_description', text: 'The role asks engineers to own features and make sound architectural decisions.' }],
-      status: 'pending',
-    },
-    {
-      id: 'rec_002', category: 'linkedin', priority: 'high', title: 'Lead with product engineering outcomes',
-      current: 'Software Engineer at Northstar Labs',
-      suggested: 'Product-focused Software Engineer | React, TypeScript & Python | Turning customer problems into measurable outcomes',
-      reason: 'A more specific headline makes your strongest alignment visible before a recruiter reads your full profile.',
-      evidence: [{ source: 'job_match', text: 'Product engineering and the modern web stack are your strongest areas of alignment.' }],
-      status: 'pending',
-    },
-    {
-      id: 'rec_003', category: 'skills', priority: 'high', title: 'Create evidence of system design ability',
-      suggested: 'Write a one-page case study covering a system constraint, options considered, your decision, trade-offs, and the outcome.',
-      reason: 'System design is a high-importance gap and can be addressed with evidence from work you may already have done.',
-      evidence: [{ source: 'job_match', text: 'System design is missing as an explicit, evidenced skill.' }],
-      status: 'pending',
-    },
-    {
-      id: 'rec_004', category: 'projects', priority: 'medium', title: 'Extend Support Insight with GraphQL',
-      current: 'Support Insight uses Python and React.',
-      suggested: 'Add a small GraphQL layer, document the schema decisions, and publish a concise architecture note.',
-      reason: 'This turns a preferred-skill gap into a concrete portfolio signal without requiring a new project.',
-      evidence: [{ source: 'candidate_profile', text: 'Support Insight is an existing Python and React project.' }, { source: 'job_description', text: 'GraphQL experience is preferred.' }],
-      status: 'pending',
-    },
-    {
-      id: 'rec_005', category: 'interview', priority: 'medium', title: 'Prepare a senior ownership story',
-      suggested: 'Use the activation redesign to explain how you framed the problem, aligned stakeholders, chose a solution, and measured the 16% improvement.',
-      reason: 'A structured ownership story will demonstrate senior-level scope despite the one-year experience gap.',
-      evidence: [{ source: 'candidate_profile', text: 'You improved activation by 16%.' }, { source: 'job_match', text: 'Your profile is about one year below the stated experience requirement.' }],
-      status: 'pending',
-    },
-    {
-      id: 'rec_006', category: 'career', priority: 'low', title: 'Document informal mentoring',
-      suggested: 'List two examples where you helped a teammate through onboarding, code review, pairing, or technical feedback.',
-      reason: 'Relevant informal experience may already exist but is not visible in your profile.',
-      evidence: [{ source: 'job_match', text: 'No explicit people-mentoring example is documented.' }],
-      status: 'pending',
-    },
-  ],
+export const mockRecommendations: RecommendationResult = {
+  priority_actions: ['Make your ownership and architecture work explicit.', 'Create evidence of system design ability.'],
+  resume_recommendations: ['Describe an architecture decision with constraints, trade-offs, scale, and a measurable result.'],
+  linkedin_recommendations: ['Lead your headline and summary with product engineering outcomes.'],
+  skill_recommendations: ['Build or document a small GraphQL API to demonstrate adjacent API design experience.'],
+  interview_recommendations: ['Prepare a structured ownership story using the activation redesign and its 16% improvement.'],
+  rationale: ['The role prioritizes end-to-end ownership and system design.', 'Your product delivery and web-stack experience are strong, but the evidence for architecture and mentoring needs to be more explicit.'],
 }
 
 const northstarCareerProfile: CareerProfile = {
@@ -169,21 +114,15 @@ const northstarTargetProfile: TargetProfile = {
 
 const northstarJobMatch: JobMatch = {
   ...mockJobMatch,
-  overall_score: 68,
-  missing_skills: [
-    { skill: 'Automated accessibility testing', importance: 'high', reason: 'The posting calls for a mature accessibility practice, while your profile shows accessible UI work without naming testing methods.', recommended_action: 'Add an example using automated and manual accessibility checks in a shipped workflow.' },
-    { skill: 'Design system governance', importance: 'medium', reason: 'You have component experience but do not yet show how you maintained standards across teams.', recommended_action: 'Document one contribution that improved component consistency or adoption.' },
-  ],
-  experience_gaps: ['No healthcare or regulated-product experience is stated.'],
-  keyword_gaps: ['WCAG', 'design system governance', 'Playwright'],
+  match_score: 68,
+  skill_gaps: ['Automated accessibility testing is not evidenced.', 'Design system governance experience is not explicit.', 'No healthcare or regulated-product experience is stated.'],
+  recommendations: ['Add an example using automated and manual accessibility checks.', 'Document one contribution that improved component consistency or adoption.'],
 }
 
-const northstarRecommendations: Recommendations = {
-  recommendations: mockRecommendations.recommendations.slice(0, 4).map((recommendation, index) => ({
-    ...recommendation,
-    id: `northstar_rec_${index + 1}`,
-    status: index === 0 ? 'accepted' : index === 1 ? 'rejected' : 'pending',
-  })),
+const northstarRecommendations: RecommendationResult = {
+  ...mockRecommendations,
+  priority_actions: ['Show accessibility testing evidence.', 'Clarify your design-system contribution.'],
+  rationale: ['Your React delivery experience aligns well.', 'Accessibility testing and design-system governance need clearer evidence.'],
 }
 
 export const mockJobStrategies: JobStrategy[] = [
@@ -202,12 +141,8 @@ export const mockJobStrategies: JobStrategy[] = [
     job_description: 'Orbit is hiring a Senior Product Engineer to own customer-facing features from discovery through launch. You will design and ship scalable React and Python systems, make sound architectural decisions, and help grow other engineers through feedback and mentoring. Deep React and TypeScript experience is required. Python API experience is strongly preferred; GraphQL experience is a plus.',
     target_profile: mockTargetProfile,
     job_match: mockJobMatch,
-    recommendations: {
-      recommendations: mockRecommendations.recommendations.map((recommendation, index) => ({
-        ...recommendation,
-        status: index < 2 ? 'accepted' : 'pending',
-      })),
-    },
+    recommendations: mockRecommendations,
+    recommendation_decisions: { 'priority:0': 'accepted', 'priority:1': 'accepted' },
   },
   {
     id: 'northstar-frontend-engineer',
@@ -225,5 +160,6 @@ export const mockJobStrategies: JobStrategy[] = [
     target_profile: northstarTargetProfile,
     job_match: northstarJobMatch,
     recommendations: northstarRecommendations,
+    recommendation_decisions: { 'priority:0': 'accepted', 'priority:1': 'rejected' },
   },
 ]

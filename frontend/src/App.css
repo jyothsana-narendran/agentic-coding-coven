@@ -336,6 +336,19 @@ details li { padding: 4px 0; line-height: 1.5; }
 .answer-guidance p { margin: 4px 0 0; color: #425c4a; font-size: 12px; }
 .question-panel form > label { display: block; margin-bottom: 8px; color: var(--ink); font-size: 13px; font-weight: 650; }
 .answer-meta { margin-top: 7px; display: flex; justify-content: space-between; gap: 20px; color: var(--faint); font-size: 10px; }
+.voice-input { margin-top: 16px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface-muted); display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.voice-input > div:first-child { min-width: 0; }
+.voice-input strong, .voice-input span { display: block; }
+.voice-input strong { color: var(--ink); font-size: 12px; }
+.voice-input span { margin-top: 3px; color: var(--faint); font-size: 10px; }
+.voice-input.is-listening { border-color: #d7aaa4; background: #fbefed; }
+.voice-input.is-listening strong { color: #8f3027; }
+.voice-input.unsupported { display: block; }
+.voice-input.unsupported p { margin: 0; font-size: 11px; }
+.voice-controls { display: flex; gap: 8px; flex-shrink: 0; }
+.button-stop { border-color: #b65349; background: #a64036; color: white; }
+.button-stop:hover { background: #8f3027; }
+.question-list button:disabled { cursor: not-allowed; opacity: .55; }
 .practice-actions { margin-top: 22px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
 .practice-actions > span { color: var(--faint); font-size: 10px; }
 .feedback-panel { margin-top: 22px; border: 1px solid #c8d9cc; border-radius: var(--radius); background: var(--surface); overflow: hidden; }
@@ -411,7 +424,8 @@ details li { padding: 4px 0; line-height: 1.5; }
   .action-overview .button { width: 100%; }
   .target-summary div + div { padding-left: 0; border-left: 0; border-top: 1px solid var(--line); }
   .created-score { grid-template-columns: 1fr; gap: 5px; }
-  .created-actions, .interview-header, .practice-actions, .feedback-heading { align-items: stretch; flex-direction: column; }
+  .created-actions, .interview-header, .practice-actions, .feedback-heading, .voice-input { align-items: stretch; flex-direction: column; }
+  .voice-controls { flex-direction: column; }
   .created-actions .button { width: 100%; }
   .interview-header { display: flex; }
   .practice-progress { padding: 14px 0 0; border-left: 0; border-top: 1px solid var(--line); }

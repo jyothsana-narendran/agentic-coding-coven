@@ -98,66 +98,29 @@ export interface TargetProfile {
   signals: string[]
 }
 
-export interface SkillMatch {
-  skill: string
-  candidate_level?: Proficiency
-  target_importance: Importance
-  evidence: string
-}
-
-export interface SkillGap {
-  skill: string
-  importance: Importance
-  reason: string
-  recommended_action: string
-}
-
-export interface MatchStrength {
-  strength: string
-  evidence: string
-}
-
 export interface JobMatch {
-  overall_score: number
-  matched_skills: SkillMatch[]
-  missing_skills: SkillGap[]
-  strengths: MatchStrength[]
-  experience_gaps: string[]
-  keyword_gaps: string[]
+  match_score: number
+  strengths: string[]
+  skill_gaps: string[]
+  evidence: string[]
+  recommendations: string[]
 }
 
 export type RecommendationCategory =
+  | 'priority'
   | 'resume'
   | 'linkedin'
   | 'skills'
-  | 'projects'
   | 'interview'
-  | 'career'
 export type RecommendationStatus = 'pending' | 'accepted' | 'rejected'
-export type RecommendationEvidenceSource =
-  | 'candidate_profile'
-  | 'job_description'
-  | 'job_match'
 
-export interface RecommendationEvidence {
-  source: RecommendationEvidenceSource
-  text: string
-}
-
-export interface Recommendation {
-  id: string
-  category: RecommendationCategory
-  priority: Importance
-  title: string
-  current?: string
-  suggested?: string
-  reason: string
-  evidence: RecommendationEvidence[]
-  status: RecommendationStatus
-}
-
-export interface Recommendations {
-  recommendations: Recommendation[]
+export interface RecommendationResult {
+  priority_actions: string[]
+  resume_recommendations: string[]
+  linkedin_recommendations: string[]
+  skill_recommendations: string[]
+  interview_recommendations: string[]
+  rationale: string[]
 }
 
 export interface CandidateInput {
@@ -181,5 +144,12 @@ export interface JobStrategy {
   job_description: string
   target_profile: TargetProfile
   job_match: JobMatch
-  recommendations: Recommendations
+  recommendations: RecommendationResult
+  recommendation_decisions: Record<string, RecommendationStatus>
+  backend_refs?: {
+    career_profile?: string
+    target_profile?: string
+    job_match?: string
+    recommendations?: string
+  }
 }

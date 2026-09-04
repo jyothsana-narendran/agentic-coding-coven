@@ -39,11 +39,7 @@ export function WorkflowProvider({ children }: { children: ReactNode }) {
       ? {
           ...strategy,
           updated_at: new Date().toISOString(),
-          recommendations: {
-            recommendations: strategy.recommendations.recommendations.map((recommendation) =>
-              recommendation.id === recommendationId ? { ...recommendation, status } : recommendation,
-            ),
-          },
+          recommendation_decisions: { ...strategy.recommendation_decisions, [recommendationId]: status },
         }
       : strategy))
     void persistRecommendationDecision(strategyId, recommendationId, status)
