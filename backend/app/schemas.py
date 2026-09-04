@@ -18,6 +18,26 @@ class JobTargetCreate(BaseModel):
     role_title: str | None = None
     job_description: str | None = None
 
+class JobProfileAnalyzeRequest(BaseModel):
+    job_description: str | None = Field(default=None, min_length=1)
+
+class CareerProfileAnalyzeRequest(BaseModel):
+    resume_text: str = Field(min_length=1)
+    linkedin_text: str = ''
+
+class JobMatchRequest(BaseModel):
+    career_profile: dict[str, Any]
+    target_profile: dict[str, Any]
+
+class PersonalBrandRequest(BaseModel):
+    career_profile: dict[str, Any]
+    target_profile: dict[str, Any] = Field(default_factory=dict)
+
+class CareerPipelineRequest(BaseModel):
+    resume_text: str = Field(min_length=1)
+    linkedin_text: str = ''
+    job_description: str = Field(min_length=1)
+
 
 class RecommendationUpdate(BaseModel):
     status: Literal["approved", "dismissed", "applied"]
