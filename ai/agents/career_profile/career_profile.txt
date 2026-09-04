@@ -247,3 +247,5 @@ general skills list. A skill may only be included if the experience
 description or evidence for that specific employment explicitly states
 that the candidate used it in that role.
 
+## OUTPUT EFFICIENCY Keep the CareerProfile output concise. Do not repeat the same information unnecessarily. For each skill, include at most 1-2 evidence items. Prefer evidence that demonstrates actual use of the skill rather than a skills-list entry when both are available. For experience, include the important achievements but do not create duplicate achievements from multiple sources. Evidence should be short and directly support the claim. Do not include reasoning, analysis, or explanations outside the CareerProfile structured output. Return only the CareerProfile structured output.
+
