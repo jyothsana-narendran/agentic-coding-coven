@@ -1,22 +1,18 @@
 import os
 
 from dotenv import load_dotenv
-from groq import Groq
+import boto3
 
 
 load_dotenv()
 
-api_key = os.getenv("GROQ_API_KEY")
+if not os.getenv("AWS_ACCESS_KEY_ID") or not os.getenv("AWS_SECRET_ACCESS_KEY"):
+    raise ValueError("AWS credentials are missing")
 
-if not api_key:
-    raise ValueError("GROQ_API_KEY is missing")
-
-
-client = Groq(api_key=api_key)
-
-models = client.models.list()
+client = boto3.client("bedrock", region_name=os.getenv("AWS_REGION", "us-east-1"))
+models = client.list_foundation_models(byProvider="Amazon")
 
 print("\nAvailable models:\n")
 
-for model in models.data:
-    print(model.id)
+for model in models.get("modelSummaries", []):
+    print(model.get("modelId"))

@@ -2,7 +2,7 @@
 import os
 
 from dotenv import load_dotenv
-from langchain_groq import ChatGroq
+from langchain_aws import ChatBedrockConverse
 
 from ai.agents.career_profile import create_career_profile_agent
 
@@ -11,18 +11,9 @@ load_dotenv()
 
 
 def main():
-    api_key = os.getenv("GROQ_API_KEY")
-
-    if not api_key:
-        raise ValueError(
-            "GROQ_API_KEY was not found in your .env file."
-        )
-
-    llm = ChatGroq(
-        model="llama-3.3-70b-versatile",
-        temperature=0,
-        api_key=api_key,
-    )
+    if not os.getenv("AWS_ACCESS_KEY_ID") or not os.getenv("AWS_SECRET_ACCESS_KEY"):
+        raise ValueError("AWS credentials were not found in your .env file.")
+    llm = ChatBedrockConverse(model=os.getenv("BEDROCK_MODEL_ID", "amazon.nova-lite-v1:0"), region_name=os.getenv("AWS_REGION", "us-east-1"), temperature=0)
 
     agent = create_career_profile_agent(llm)
 
