@@ -3,13 +3,13 @@ from ..config import get_settings
 
 def _llm():
     settings = get_settings()
-    if settings.groq_api_key:
+    if settings.aws_access_key_id and settings.aws_secret_access_key:
         try:
-            from langchain_groq import ChatGroq
+            from langchain_aws import ChatBedrockConverse
         except ImportError as exc:
-            raise HTTPException(503, 'Install langchain-groq to use GROQ_API_KEY') from exc
-        return ChatGroq(model=settings.groq_model, api_key=settings.groq_api_key, temperature=0.2)
-    raise HTTPException(503, 'GROQ_API_KEY is not configured')
+            raise HTTPException(503, 'Install langchain-aws to use Amazon Bedrock') from exc
+        return ChatBedrockConverse(model=settings.bedrock_model_id, region_name=settings.aws_region, temperature=0.2)
+    raise HTTPException(503, 'AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY are not configured')
 
 async def analyze_resume(text: str, target_context: dict | None = None) -> dict:
     # The career-profile graph returns the complete structured profile.

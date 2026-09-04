@@ -9,8 +9,11 @@ class Settings(BaseSettings):
     supabase_url: str = ''
     supabase_anon_key: str = ''
     supabase_service_role_key: str = ''
-    groq_api_key: str = ''
-    groq_model: str = 'llama-3.3-70b-versatile'
+    aws_access_key_id: str = ''
+    aws_secret_access_key: str = ''
+    aws_session_token: str = ''
+    aws_region: str = 'us-east-1'
+    bedrock_model_id: str = 'amazon.nova-lite-v1:0'
     max_upload_size_bytes: int = 10 * 1024 * 1024
 
 @lru_cache
