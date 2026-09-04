@@ -22,6 +22,11 @@ class JobTargetCreate(BaseModel):
 class RecommendationUpdate(BaseModel):
     status: Literal["approved", "dismissed", "applied"]
 
+class InterviewCoachRequest(BaseModel):
+    question: str = Field(min_length=1)
+    answer: str = Field(min_length=1)
+    job_context: str = ''
+
 
 class RecordResponse(BaseModel):
     id: str

@@ -20,7 +20,7 @@ def main():
 
     llm = ChatGroq(
         api_key=api_key,
-        model="openai/gpt-oss-120b",
+        model="llama-3.3-70b-versatile",
         temperature=0,
     )
 
