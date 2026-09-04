@@ -1,0 +1,36 @@
+John Doe
+
+Software Engineer
+
+Email: john@example.com
+
+EXPERIENCE
+
+Software Engineer — ABC Technologies
+2022 - 2025
+
+Built backend services using Python and FastAPI.
+
+Led a team of 4 developers to build an AI scheduling platform.
+
+Improved API response time by 35%.
+
+Worked with PostgreSQL and Docker.
+
+PROJECTS
+
+AI Scheduler
+
+Built an AI-powered scheduling application using Python,
+FastAPI, PostgreSQL and React.
+
+EDUCATION
+
+Bachelor of Science in Computer Science
+National University
+2018 - 2022
+
+CERTIFICATIONS
+
+AWS Certified Cloud Practitioner
+Amazon Web Services
