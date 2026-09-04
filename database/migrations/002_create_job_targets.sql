@@ -11,4 +11,5 @@ create table if not exists public.job_targets (
   updated_at timestamptz not null default timezone('utc', now())
 );
 create index if not exists job_targets_user_id_idx on public.job_targets(user_id);
+drop trigger if exists job_targets_updated_at on public.job_targets;
 create trigger job_targets_updated_at before update on public.job_targets for each row execute function public.set_updated_at();

@@ -13,4 +13,11 @@ class Repository:
         record = self.records.get(record_id)
         return record if record and record['user_id'] == user_id else None
 
+    def save_agent_output(self, kind: str, user_id: str, output: dict[str, Any], source_id: str | None = None) -> dict[str, Any]:
+        """Persist a complete validated agent payload while Supabase integration is wired in."""
+        data = {'output': output}
+        if source_id:
+            data['source_id'] = source_id
+        return self.create(kind, user_id, data, 'completed')
+
 repository = Repository()

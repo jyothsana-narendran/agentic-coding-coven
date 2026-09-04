@@ -10,4 +10,5 @@ create table if not exists public.recommendations (
   updated_at timestamptz not null default timezone('utc', now())
 );
 create index if not exists recommendations_user_id_idx on public.recommendations(user_id);
+drop trigger if exists recommendations_updated_at on public.recommendations;
 create trigger recommendations_updated_at before update on public.recommendations for each row execute function public.set_updated_at();

@@ -34,5 +34,7 @@ create table if not exists public.resumes (
 );
 
 create index if not exists resumes_user_id_idx on public.resumes(user_id);
+drop trigger if exists profiles_updated_at on public.profiles;
 create trigger profiles_updated_at before update on public.profiles for each row execute function public.set_updated_at();
+drop trigger if exists resumes_updated_at on public.resumes;
 create trigger resumes_updated_at before update on public.resumes for each row execute function public.set_updated_at();

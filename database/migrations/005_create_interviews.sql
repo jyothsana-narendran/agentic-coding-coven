@@ -13,4 +13,5 @@ create table if not exists public.interviews (
   updated_at timestamptz not null default timezone('utc', now())
 );
 create index if not exists interviews_user_id_idx on public.interviews(user_id);
+drop trigger if exists interviews_updated_at on public.interviews;
 create trigger interviews_updated_at before update on public.interviews for each row execute function public.set_updated_at();
