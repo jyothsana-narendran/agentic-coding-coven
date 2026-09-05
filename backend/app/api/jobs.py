@@ -34,4 +34,4 @@ async def match_job(payload: JobMatchRequest, user_id: str = Depends(current_use
 @router.post('/personal-brand')
 async def personal_brand(payload: PersonalBrandRequest, user_id: str = Depends(current_user_id)):
     result = await build_personal_brand(payload.career_profile, payload.target_profile)
-    return repository.create('recommendation', user_id, {'category': 'personal_brand', 'content': result}, 'completed')
+    return repository.create('recommendation', user_id, {'category': 'personal_brand', 'content': result, 'recommendation_data': result}, 'pending')

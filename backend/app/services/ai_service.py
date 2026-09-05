@@ -57,6 +57,9 @@ async def run_career_pipeline(candidate_id: str, resume_text: str, linkedin_text
     from ai.graphs.career_pipeline import create_career_pipeline
     result = await create_career_pipeline(_llm()).ainvoke({'candidate_id': candidate_id, 'resume_text': resume_text, 'linkedin_text': linkedin_text, 'job_description': job_description})
     if result.get('error'): raise HTTPException(502, result['error'])
+    required = ('career_profile', 'target_profile', 'job_match', 'recommendations')
+    missing = [key for key in required if key not in result]
+    if missing: raise HTTPException(502, f'Career pipeline did not produce: {", ".join(missing)}')
     return result
 
 async def coach_interview(question: str, answer: str, job_context: str = '') -> dict:

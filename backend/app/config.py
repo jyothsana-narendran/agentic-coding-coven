@@ -12,7 +12,7 @@ class Settings(BaseSettings):
     aws_access_key_id: str = ''
     aws_secret_access_key: str = ''
     aws_session_token: str = ''
-    aws_region: str = 'us-east-1'
+    aws_region: str = 'ap-southeast-1'
     bedrock_model_id: str = 'amazon.nova-lite-v1:0'
     max_upload_size_bytes: int = 10 * 1024 * 1024
 
