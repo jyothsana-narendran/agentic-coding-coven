@@ -1,7 +1,7 @@
 .env
 .env.*
+**/.env
+**/.env.*
 !.env.example
-backend/.env
-frontend/.env
-frontend/.env.*
+!.env.bedrock.example
 !frontend/.env.example

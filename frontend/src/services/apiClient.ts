@@ -34,14 +34,21 @@ export async function postJson<TResponse, TBody>(path: string, body: TBody): Pro
   }
 
   if (!response.ok) {
+    let backendDetail = ''
+    try {
+      const errorBody = await response.json() as { detail?: string }
+      backendDetail = typeof errorBody.detail === 'string' ? errorBody.detail : ''
+    } catch {
+      // Keep the friendly fallback below when the server returns non-JSON.
+    }
     const message = response.status === 401
       ? 'The development identity was not accepted. Check the frontend API configuration.'
       : response.status === 422
-        ? 'Some required information was missing or invalid. Review your inputs and try again.'
+        ? backendDetail || 'Some required information was missing or invalid. Review your inputs and try again.'
         : response.status === 503
           ? 'The AI analysis service is not configured yet.'
-          : response.status === 502
-            ? 'The AI analysis could not be completed. Please try again.'
+            : response.status === 502
+            ? backendDetail || 'The AI analysis could not be completed. Please try again.'
             : 'The analysis service could not complete this request.'
     throw new ApiError(message, response.status)
   }

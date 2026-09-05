@@ -27,9 +27,7 @@ def create_job_profile_agent(llm):
     Creates and compiles the Job Profile LangGraph agent.
     """
 
-    structured_llm = llm.with_structured_output(
-        TargetProfile
-    )
+    structured_llm = llm.with_structured_output(TargetProfile, method='json_schema')
 
     prompts = load_prompts()
 

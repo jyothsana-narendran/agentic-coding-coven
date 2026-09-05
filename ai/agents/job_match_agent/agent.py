@@ -17,7 +17,7 @@ def load_prompts():
 
 
 def create_job_match_agent(llm):
-    structured_llm = llm.with_structured_output(JobMatch)
+    structured_llm = llm.with_structured_output(JobMatch, method='json_schema')
 
     prompts = load_prompts()
 
@@ -25,14 +25,17 @@ def create_job_match_agent(llm):
         career_profile = state["career_profile"]
         target_profile = state["target_profile"]
 
+        def as_json(value):
+            return value.model_dump_json(indent=2) if hasattr(value, 'model_dump_json') else __import__('json').dumps(value, indent=2)
+
         user_prompt = f"""
 {prompts}
 
 Career Profile:
-{career_profile.model_dump_json(indent=2)}
+{as_json(career_profile)}
 
 Target Profile:
-{target_profile.model_dump_json(indent=2)}
+{as_json(target_profile)}
 """
 
         try:
@@ -67,4 +70,3 @@ Target Profile:
     )
 
     return graph.compile()
-

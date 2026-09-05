@@ -7,6 +7,15 @@ from services.repository import repository, supabase_insert
 from ..config import get_settings
 
 router = APIRouter(prefix='/profile', tags=['profile'])
+@router.get('/pipeline')
+async def pipeline_info():
+    return {
+        'name': 'Career analysis pipeline',
+        'method': 'POST',
+        'endpoint': '/profile/pipeline',
+        'required_fields': ['resume_text', 'linkedin_text', 'job_description'],
+        'message': 'Use POST with JSON input to run the four-agent analysis.',
+    }
 @router.get('')
 async def get_profile(user_id: str = Depends(current_user_id)):
     return repository.records.get(user_id, {'id': user_id, 'skills': [], 'onboarding_completed': False})
@@ -28,13 +37,28 @@ async def analyze_profile(payload: CareerProfileAnalyzeRequest, user_id: str = D
 
 @router.post('/pipeline')
 async def run_pipeline(payload: CareerPipelineRequest, user_id: str = Depends(current_user_id)):
-    result = await run_career_pipeline(user_id, payload.resume_text, payload.linkedin_text, payload.job_description)
+    try:
+        result = await run_career_pipeline(user_id, payload.resume_text, payload.linkedin_text, payload.job_description)
+    except ValueError as exc:
+        raise HTTPException(422, str(exc)) from exc
     if get_settings().supabase_url and get_settings().supabase_service_role_key:
         target = await supabase_insert('job_targets', {'user_id': user_id, 'company_name': result['target_profile'].get('company', 'Target company'), 'website_url': 'https://pipeline.local', 'role_title': result['target_profile'].get('role'), 'job_description': payload.job_description, 'company_context': result['target_profile'], 'analysis_status': 'completed'})
         career = await supabase_insert('career_profiles', {'user_id': user_id, 'candidate_name': result['career_profile'].get('candidate_name', 'Candidate'), 'summary': result['career_profile'].get('summary', ''), 'education': result['career_profile'].get('education', []), 'skills': result['career_profile'].get('skills', []), 'experience': result['career_profile'].get('experience', []), 'projects': result['career_profile'].get('projects', []), 'achievements': result['career_profile'].get('achievements', []), 'certifications': result['career_profile'].get('certifications', [])})
-        target_profile = await supabase_insert('target_profiles', {'user_id': user_id, 'job_target_id': target['id'], **{k: result['target_profile'].get(k) for k in ('company','role','seniority','responsibilities','required_skills','preferred_skills','soft_skills','experience_requirements','education_requirements','keywords','signals')}})
-        match_payload = {k: result['job_match'].get(k) for k in ('match_score', 'strengths', 'skill_gaps', 'recommendations')}
-        match_payload.update({'user_id': user_id, 'job_target_id': target['id'], 'evidence': result['job_match'].get('evidence', [])})
+        target_data = result['target_profile']
+        target_profile_payload = {'user_id': user_id, 'job_target_id': target['id'], 'company': target_data.get('company') or target['company_name'], 'role': target_data.get('role') or target.get('role_title') or 'Target role', 'seniority': target_data.get('seniority')}
+        for field in ('responsibilities','required_skills','preferred_skills','soft_skills','experience_requirements','education_requirements','keywords','signals'):
+            target_profile_payload[field] = target_data.get(field) or []
+        target_profile = await supabase_insert('target_profiles', target_profile_payload)
+        job_match = result['job_match']
+        match_payload = {
+            'user_id': user_id,
+            'job_target_id': target['id'],
+            'match_score': job_match.get('match_score'),
+            'strengths': job_match.get('strengths') or [],
+            'skill_gaps': job_match.get('skill_gaps') or [],
+            'recommendations': job_match.get('recommendations') or [],
+            'evidence': job_match.get('evidence') or [],
+        }
         match = await supabase_insert('job_matches', match_payload)
         recommendation_payload = {
             'user_id': user_id,

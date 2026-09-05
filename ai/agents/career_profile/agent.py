@@ -25,9 +25,7 @@ def create_career_profile_agent(llm):
     Creates and compiles the Career Profile LangGraph agent.
     """
 
-    structured_llm = llm.with_structured_output(
-        CareerProfile
-    )
+    structured_llm = llm.with_structured_output(CareerProfile, method='json_schema')
 
     prompts = load_prompts()
 

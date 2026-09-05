@@ -1,6 +1,17 @@
 from typing import Any, Literal
 
-from pydantic import BaseModel, Field, HttpUrl
+from pydantic import BaseModel, Field, HttpUrl, field_validator
+
+
+def _required_text(value: str) -> str:
+    value = value.strip()
+    if not value:
+        raise ValueError('must not be empty')
+    return value
+
+
+def _optional_text(value: str) -> str:
+    return value.strip()
 
 
 class ProfileUpdate(BaseModel):
@@ -37,6 +48,10 @@ class CareerPipelineRequest(BaseModel):
     resume_text: str = Field(min_length=1)
     linkedin_text: str = ''
     job_description: str = Field(min_length=1)
+
+    _normalize_resume = field_validator('resume_text')(_required_text)
+    _normalize_linkedin = field_validator('linkedin_text')(_optional_text)
+    _normalize_job = field_validator('job_description')(_required_text)
 
 
 class RecommendationUpdate(BaseModel):

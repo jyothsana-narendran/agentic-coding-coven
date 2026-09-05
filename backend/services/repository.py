@@ -1,5 +1,5 @@
 from typing import Any
-from uuid import uuid4
+from uuid import UUID, uuid4
 import httpx
 from app.config import get_settings
 
@@ -29,6 +29,12 @@ async def supabase_insert(table: str, payload: dict[str, Any]) -> dict[str, Any]
     settings = get_settings()
     if not settings.supabase_url or not settings.supabase_service_role_key:
         raise RuntimeError('Supabase server credentials are not configured')
+    user_id = payload.get('user_id')
+    if user_id:
+        try:
+            UUID(str(user_id))
+        except ValueError as exc:
+            raise ValueError('Supabase user_id must be a valid authenticated user UUID; replace VITE_DEV_USER_ID') from exc
     headers = {
         'apikey': settings.supabase_service_role_key,
         'Authorization': f'Bearer {settings.supabase_service_role_key}',

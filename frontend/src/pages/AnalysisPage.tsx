@@ -40,7 +40,7 @@ export function AnalysisPage() {
     return () => { cancelled = true; if (stageTimer !== undefined) window.clearInterval(stageTimer) }
   }, [addStrategy, attempt, draft, navigate])
 
-  if (!draft.candidateInput.resume_text || !draft.candidateInput.linkedin_text || !draft.jobDescription) return <Navigate to="/new/profile" replace />
+  if (!draft.candidateInput.resume_text || !draft.jobDescription) return <Navigate to="/new/profile" replace />
 
   return (
     <div className="analysis-page page-width-narrow" aria-live="polite">

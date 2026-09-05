@@ -8,7 +8,7 @@ export function JobTargetPage() {
   const [description, setDescription] = useState(draft.jobDescription)
   const [submitted, setSubmitted] = useState(false)
 
-  if (!draft.candidateInput.resume_text || !draft.candidateInput.linkedin_text) return <Navigate to="/new/profile" replace />
+  if (!draft.candidateInput.resume_text) return <Navigate to="/new/profile" replace />
 
   function handleSubmit(event: FormEvent) {
     event.preventDefault()

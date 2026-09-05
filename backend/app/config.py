@@ -1,5 +1,6 @@
 from functools import lru_cache
 from pathlib import Path
+from pydantic import Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
@@ -12,6 +13,7 @@ class Settings(BaseSettings):
     aws_access_key_id: str = ''
     aws_secret_access_key: str = ''
     aws_session_token: str = ''
+    bedrock_api_key: str = Field(default='', validation_alias='AWS_BEARER_TOKEN_BEDROCK')
     aws_region: str = 'ap-southeast-1'
     bedrock_model_id: str = 'amazon.nova-lite-v1:0'
     max_upload_size_bytes: int = 10 * 1024 * 1024

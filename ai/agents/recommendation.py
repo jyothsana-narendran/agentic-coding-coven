@@ -12,7 +12,7 @@ class RecommendationState(TypedDict, total=False):
     error: str | None
 
 def create_recommendation_agent(llm):
-    structured_llm = llm.with_structured_output(RecommendationResult)
+    structured_llm = llm.with_structured_output(RecommendationResult, method='json_schema')
     prompt = PROMPT_FILE.read_text(encoding='utf-8')
     def recommend(state: RecommendationState):
         try:

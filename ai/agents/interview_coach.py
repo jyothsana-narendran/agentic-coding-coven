@@ -29,7 +29,7 @@ def create_interview_coach_agent(llm):
     The caller supplies a configured chat model, keeping API keys and model
     selection outside the agent module.
     """
-    structured_llm = llm.with_structured_output(InterviewSessionResult)
+    structured_llm = llm.with_structured_output(InterviewSessionResult, method='json_schema')
     prompt = load_prompt()
 
     def coach(state: InterviewCoachState):

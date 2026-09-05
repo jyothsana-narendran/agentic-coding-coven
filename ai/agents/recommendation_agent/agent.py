@@ -26,9 +26,7 @@ def load_prompts():
 
 def create_recommendation_agent(llm):
 
-    structured_llm = llm.with_structured_output(
-        Recommendations
-    )
+    structured_llm = llm.with_structured_output(Recommendations, method='json_schema')
 
     prompts = load_prompts()
 
@@ -44,6 +42,9 @@ def create_recommendation_agent(llm):
         target_profile = state["target_profile"]
         job_match = state["job_match"]
 
+        def as_json(value):
+            return value.model_dump_json(indent=2) if hasattr(value, 'model_dump_json') else __import__('json').dumps(value, indent=2)
+
         user_prompt = f"""
 {prompts}
 
@@ -51,19 +52,19 @@ def create_recommendation_agent(llm):
 # CAREER PROFILE
 # ==================================================
 
-{career_profile.model_dump_json(indent=2)}
+{as_json(career_profile)}
 
 # ==================================================
 # TARGET PROFILE
 # ==================================================
 
-{target_profile.model_dump_json(indent=2)}
+{as_json(target_profile)}
 
 # ==================================================
 # JOB MATCH
 # ==================================================
 
-{job_match.model_dump_json(indent=2)}
+{as_json(job_match)}
 
 # ==================================================
 
@@ -119,4 +120,3 @@ Return the result using the Recommendations schema.
     )
 
     return graph.compile()
-
