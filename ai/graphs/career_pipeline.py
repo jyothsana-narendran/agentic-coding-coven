@@ -39,5 +39,12 @@ def create_career_pipeline(llm):
         if r.get('error'): return {'error': r['error']}
         return {'recommendations': r['result'].model_dump()}
     graph.add_node('career_profile', career_node); graph.add_node('job_profile', target_node); graph.add_node('job_match', match_node); graph.add_node('recommendations', recommendation_node)
-    graph.add_edge(START, 'career_profile'); graph.add_edge('career_profile', 'job_profile'); graph.add_edge('job_profile', 'job_match'); graph.add_edge('job_match', 'recommendations'); graph.add_edge('recommendations', END)
+    def next_after_profile(s): return 'stop' if s.get('error') else 'continue'
+    def next_after_target(s): return 'stop' if s.get('error') else 'continue'
+    def next_after_match(s): return 'stop' if s.get('error') else 'continue'
+    graph.add_edge(START, 'career_profile')
+    graph.add_conditional_edges('career_profile', next_after_profile, {'continue': 'job_profile', 'stop': END})
+    graph.add_conditional_edges('job_profile', next_after_target, {'continue': 'job_match', 'stop': END})
+    graph.add_conditional_edges('job_match', next_after_match, {'continue': 'recommendations', 'stop': END})
+    graph.add_edge('recommendations', END)
     return graph.compile()
