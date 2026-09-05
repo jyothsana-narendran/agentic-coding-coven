@@ -1,1 +1,0 @@
-Compare the candidate profile with the target job profile. Score the match from 0 to 100, identify strengths and skill gaps, cite evidence from the supplied data, and give actionable recommendations. Do not invent qualifications or experience.
