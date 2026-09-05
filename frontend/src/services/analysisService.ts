@@ -65,22 +65,31 @@ function normalizeTargetProfile(profile: TargetProfile): TargetProfile {
 }
 
 function normalizeJobMatch(match: JobMatch): JobMatch {
+  const live = match as JobMatch & { overall_score?: number; missing_skills?: Array<{ skill?: string; reason?: string; recommended_action?: string }> }
+  const strengths = (match as JobMatch & { strengths?: Array<string | { strength?: string; evidence?: string }> }).strengths ?? []
+  const gaps = Array.isArray(live.missing_skills)
+    ? live.missing_skills.map((gap) => [gap.skill, gap.reason, gap.recommended_action].filter(Boolean).join(': '))
+    : match.skill_gaps
   return {
-    match_score: Number.isFinite(match.match_score) ? match.match_score : 0,
-    strengths: asList(match.strengths),
-    skill_gaps: asList(match.skill_gaps),
+    match_score: Number.isFinite(match.match_score) ? match.match_score : (Number.isFinite(live.overall_score) ? live.overall_score! : 0),
+    strengths: strengths.map((item: string | { strength?: string; evidence?: string }) => typeof item === 'string' ? item : [item.strength, item.evidence].filter(Boolean).join(': ')),
+    skill_gaps: asList(gaps),
     evidence: asList(match.evidence),
     recommendations: asList(match.recommendations),
   }
 }
 
 function normalizeRecommendations(result: RecommendationResult): RecommendationResult {
+  const live = result as RecommendationResult & { recommendations?: Array<{ category?: string; title?: string; reason?: string; suggested?: string; priority?: string }> }
+  const items = asList(live.recommendations)
+  const text = (item: { title?: string; reason?: string; suggested?: string }) => [item.title, item.reason, item.suggested].filter(Boolean).join(': ')
+  const byCategory = (category: string) => items.filter((item) => item.category === category).map(text)
   return {
-    priority_actions: asList(result.priority_actions),
-    resume_recommendations: asList(result.resume_recommendations),
-    linkedin_recommendations: asList(result.linkedin_recommendations),
-    skill_recommendations: asList(result.skill_recommendations),
-    interview_recommendations: asList(result.interview_recommendations),
+    priority_actions: asList(result.priority_actions).length ? result.priority_actions : items.filter((item) => item.priority === 'critical' || item.priority === 'high').map(text),
+    resume_recommendations: asList(result.resume_recommendations).length ? result.resume_recommendations : byCategory('resume'),
+    linkedin_recommendations: asList(result.linkedin_recommendations).length ? result.linkedin_recommendations : byCategory('linkedin'),
+    skill_recommendations: asList(result.skill_recommendations).length ? result.skill_recommendations : byCategory('skills'),
+    interview_recommendations: asList(result.interview_recommendations).length ? result.interview_recommendations : byCategory('interview'),
     rationale: asList(result.rationale),
   }
 }
