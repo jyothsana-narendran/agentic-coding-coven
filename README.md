@@ -1,94 +1,24 @@
-Career Copilot — Project Scope
-
-## Overview
+Career Copilot
 
 Career Copilot is an agentic career intelligence system that helps candidates move beyond simply applying for jobs and become stronger candidates for the roles they target.
 
-The system combines a candidate's resume and LinkedIn profile with a target job description to build a structured understanding of both the candidate and the role. It then evaluates suitability, identifies areas of alignment, highlights strengths and potential gaps, and provides actionable recommendations to improve the candidate's chances.
+> **Don't just apply. Become the stronger candidate.**
 
-> **Core principle:** Don't just apply. Become the stronger candidate.
+The application combines a candidate's resume and LinkedIn profile with a target job description to identify strengths, gaps, and practical next steps. It turns the traditional `find → apply → interview` workflow into:
 
-Rather than treating a job application as a one-time matching exercise, Career Copilot supports the full process—from understanding the candidate and target role to identifying areas for improvement and providing personalized recommendations.
+`understand → assess → improve → prepare → perform`
 
-## Summary
+## Features
 
-Career Copilot supports candidates throughout the job application process by combining their professional background with the requirements of a specific target role.
+- Candidate profile analysis from resume and LinkedIn information.
+- Target-role analysis and candidate/job compatibility assessment.
+- Personalized action plans for improving candidacy.
+- Resume and LinkedIn positioning recommendations.
+- Role-specific interview practice and coaching.
 
-The system focuses on four key capabilities:
+## Architecture
 
-1. **Candidate understanding** — Builds a structured view of the candidate's experience, skills, achievements, education, and career background.
-2. **Role understanding and job matching** — Analyzes the target role and evaluates how well the candidate's background aligns with its requirements.
-3. **Personalized recommendations** — Provides actionable guidance to better position existing experience and address important gaps.
-4. **Interview preparation and coaching** — Generates role-specific questions and provides feedback grounded in the candidate's profile and target role.
-
-Career Copilot transforms the traditional:
-
-> Find → Apply → Interview
-
-into an intelligent, continuous process:
-
-> Understand → Assess → Improve → Prepare → Perform
-
-## Motivation
-
-The job application process is often treated as a simple cycle: find a suitable role, submit an application, and prepare for an interview. Candidates are frequently left without a clear understanding of how well they align with a role, where their gaps are, or what they can do to improve their chances of success.
-
-Existing tools often focus on resume optimization or basic match scores. While useful, these approaches primarily answer:
-
-> How well do I match this job?
-
-Career Copilot focuses on the more useful question:
-
-> How can I become a stronger candidate for this job?
-
-By combining a candidate's professional background with the requirements of a specific role, the system provides deeper insight into strengths, gaps, and positioning. The goal is not simply to help candidates apply to more jobs, but to help them make informed decisions and continuously improve their readiness.
-
-## User Stories
-
-- As a candidate, I want to provide my resume and LinkedIn profile so that the system can understand my professional background, skills, and experience.
-- As a candidate, I want to provide a target job description so that I can understand how well my profile aligns with the role and identify potential gaps.
-- As a candidate, I want personalized recommendations based on my profile and the target role so that I can take actionable steps to become a stronger candidate.
-- As a candidate, I want role-specific interview questions and feedback so that I can improve how I communicate my experience.
-
-## Proposed Core Features
-
-### 1. Candidate Analysis
-
-Users can upload their resume and LinkedIn information. Career Copilot uses this data to create a specialized candidate profile containing relevant skills, experience, education, achievements, and professional background.
-
-This profile provides the foundation for job matching and personalized recommendations.
-
-### 2. Compatibility Analysis
-
-Users can provide details of a desired job posting. The system compares the candidate profile with the job requirements to evaluate compatibility between the candidate's skills and experience and the target role.
-
-The analysis is generated dynamically from the candidate's specific background and the requirements of the role, making the assessment relevant to each application.
-
-### 3. Personalized Action Plan
-
-The compatibility analysis is converted into actionable recommendations for strengthening the candidate's positioning.
-
-Recommendations may include:
-
-- Skills or competencies to develop.
-- Resume restructuring or refinement.
-- LinkedIn updates that better highlight relevant experience.
-- Ways to address identified gaps.
-- Suggestions for improving overall candidacy.
-
-Each recommendation is tailored to the candidate's context rather than providing generic career advice. Users can review recommendations and accept or reject individual actions as they work through their plan.
-
-### 4. Personalized Interview Preparation and Coaching
-
-Career Copilot helps users prepare for the target role with interview questions and feedback grounded in both the candidate's background and the role's requirements.
-
-Users can practice answering potential interview questions. For each submitted response, the Interview Coach provides structured feedback on how to communicate the candidate's experience more effectively and appeal to interviewers.
-
-## Agentic Workflow
-
-The application implements a multi-agent career intelligence workflow that analyzes candidate information and a target job description independently, evaluates candidate-job fit, and generates personalized recommendations.
-
-### Workflow Overview
+Career Copilot uses a sequential multi-agent workflow. Each agent produces structured output for the next stage:
 
 ```text
 LinkedIn Profile + Resume → CareerProfile
@@ -97,148 +27,170 @@ CareerProfile + TargetProfile → JobMatch
 CareerProfile + TargetProfile + JobMatch → Recommendations
 ```
 
-The workflow is composed of four specialized agents:
-
 | Agent | Responsibility | Output |
 |---|---|---|
-| Career Profile Agent | Understands and structures the candidate's professional background | `CareerProfile` |
-| Job Profile Agent | Understands and structures the target job | `TargetProfile` |
-| Job Match Agent | Evaluates the relationship between the candidate and target role | `JobMatch` |
-| Recommendation Agent | Generates personalized actions using the complete workflow context | `Recommendations` |
+| Career Profile Agent | Structures the candidate's experience, skills, and achievements | `CareerProfile` |
+| Job Profile Agent | Extracts requirements and expectations from the target role | `TargetProfile` |
+| Job Match Agent | Evaluates alignment, strengths, and gaps | `JobMatch` |
+| Recommendation Agent | Generates tailored, actionable improvement steps | `Recommendations` |
 
-Each agent has a clearly defined responsibility and produces a structured output consumed by subsequent agents.
+### Technology stack
 
-### Career Profile Agent
+- **Frontend:** React, TypeScript, Vite
+- **Backend:** FastAPI, Python
+- **Database and storage:** Supabase
+- **AI models:** AWS Bedrock
+- **Agent orchestration:** LangChain, LangGraph
+- **Validation:** Pydantic
 
-**Inputs:**
+## Prerequisites
 
-- `candidate_id`
-- `linkedin_text`
-- `resume_text`
+Install the following before starting:
 
-The agent processes the LinkedIn profile and resume together to create a consolidated `CareerProfile`. This transforms unstructured career information into a reusable, structured representation.
+- Python 3.13 or later
+- Node.js and npm
+- An AWS Bedrock credential, either a bearer token or AWS IAM credentials
+- A Supabase project if you want persistent database and storage functionality
 
-```text
-LinkedIn Profile + Resume
-          ↓
-Career Profile Agent
-          ↓
-CareerProfile
+## Setup
+
+### 1. Clone the repository
+
+```bash
+git clone <repository-url>
+cd career-copilot
 ```
 
-If the agent returns an error, the workflow stops rather than continuing with incomplete candidate information.
+### 2. Configure the backend
 
-### Job Profile Agent
+Create the backend virtual environment and install dependencies:
 
-**Input:**
-
-- Raw job description
-
-The agent converts the job description into a structured `TargetProfile` representing the characteristics and requirements relevant to candidate evaluation.
-
-```text
-Job Description
-       ↓
-Job Profile Agent
-       ↓
-TargetProfile
+```bash
+cd backend
+python3.13 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
 ```
 
-If the agent returns an error, the workflow stops and matching or recommendations are not performed.
+Copy the environment template to the project root:
 
-### Job Match Agent
-
-**Inputs:**
-
-- `CareerProfile`
-- `TargetProfile`
-
-The agent evaluates the candidate's overall fit for the position based on the structured outputs from the previous stages.
-
-```text
-CareerProfile + TargetProfile
-              ↓
-        Job Match Agent
-              ↓
-           JobMatch
+```bash
+cp ../.env.example ../.env
 ```
 
-Separating matching from recommendation generation allows the Recommendation Agent to focus on producing useful actions instead of independently re-evaluating candidate fit.
+Open `../.env` and configure the values below:
 
-### Recommendation Agent
+```dotenv
+AWS_REGION=us-east-1
+BEDROCK_MODEL_ID=amazon.nova-lite-v1:0
 
-**Inputs:**
+# Use either a Bedrock bearer token...
+AWS_BEARER_TOKEN_BEDROCK=your-bedrock-bearer-token
 
-- `CareerProfile`
-- `TargetProfile`
-- `JobMatch`
+# ...or AWS IAM credentials.
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_SESSION_TOKEN=
 
-The agent uses the complete candidate-job context to generate the final recommendations.
+# Optional for local in-memory mode.
+SUPABASE_URL=https://your-project-ref.supabase.co
+SUPABASE_ANON_KEY=your-supabase-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-supabase-service-role-key
 
-```text
-CareerProfile
-      +
-TargetProfile
-      +
-JobMatch
-      ↓
-Recommendation Agent
-      ↓
-Recommendations
+FRONTEND_ORIGIN=http://localhost:5173
 ```
 
-## Structured Data Flow
+Do not commit `.env` or expose AWS credentials in the frontend.
 
-Agents communicate through structured objects rather than passing raw text between every model call.
+### 3. Configure the frontend
 
-| Source | Structured representation |
-|---|---|
-| Raw candidate data | `CareerProfile` |
-| Raw job data | `TargetProfile` |
-| Candidate-job comparison | `JobMatch` |
-| Final analysis | `Recommendations` |
+In a second terminal, install the frontend dependencies:
 
-```text
-Raw Candidate Data → CareerProfile
-Raw Job Data       → TargetProfile
-CareerProfile + TargetProfile → JobMatch
-CareerProfile + TargetProfile + JobMatch → Recommendations
+```bash
+cd frontend
+npm install
+cp .env.example .env.local
 ```
 
-This progressive transformation makes the workflow easier to reason about and gives each stage a clear input/output contract.
+The default frontend configuration uses the FastAPI backend:
 
-## Technology Stack
+```dotenv
+VITE_DATA_SOURCE=api
+VITE_API_URL=http://localhost:8000
+VITE_DEV_USER_ID=career-copilot-local-demo
+```
 
-| Area | Technology |
-|---|---|
-| Frontend | React + Vite |
-| Backend | FastAPI + Python |
-| Database | Supabase |
-| AI models | AWS Bedrock |
-| Agent workflow | LangChain / LangGraph |
-| Data validation | Pydantic |
-| HTTP client | HTTPX |
+To run the UI with local fixture data instead, set `VITE_DATA_SOURCE=mock`.
 
-## Future Plans
+## Run locally
 
-### Personalized Mock Interview Preparation
+Start the backend from the `backend` directory:
 
-Use the `CareerProfile`, `TargetProfile`, and `JobMatch` to generate candidate- and role-specific mock interviews. Questions can reflect the candidate's actual experience and identified gaps, while adaptive follow-up questions respond to the candidate's answers.
+```bash
+source .venv/bin/activate
+uvicorn app.main:app --reload --port 8000
+```
 
-### Broader Candidate Analysis
+Start the frontend from the `frontend` directory in another terminal:
 
-Extend candidate analysis to portfolios, personal websites, GitHub repositories, publications, and other relevant professional profiles. This would help distinguish between claimed skills and skills supported by demonstrated work.
+```bash
+npm run dev
+```
 
-### Deeper Employer Intelligence
+Open the local URL shown by Vite, normally [http://localhost:5173](http://localhost:5173).
 
-Analyze company websites, careers pages, values, culture, technology environments, and multiple job postings to identify broader hiring expectations. Recommendations and interview preparation could then be tailored to both the role and the organization.
+Check that the backend is running at [http://localhost:8000/health](http://localhost:8000/health). The expected response is:
 
-### Continuous Career Development
+```json
+{"status":"ok"}
+```
 
-Evolve from a point-in-time assessment into a continuous career development system. Candidate progress could be tracked as users complete recommendations, develop skills, gain experience, and update their professional profiles.
+## Useful commands
+
+From `frontend/`:
+
+```bash
+npm run build    # Type-check and create a production build
+npm run lint     # Run ESLint
+npm run preview  # Preview the production build
+```
+
+From `backend/`:
+
+```bash
+uvicorn app.main:app --reload --port 8000
+```
+
+## Project structure
+
+```text
+career-copilot/
+├── backend/
+│   ├── app/
+│   │   ├── api/             # Profile, jobs, recommendations, interviews
+│   │   ├── services/        # AI, storage, and transcription services
+│   │   ├── config.py        # Environment-backed application settings
+│   │   └── main.py          # FastAPI application entry point
+│   └── requirements.txt
+├── frontend/
+│   ├── src/
+│   │   ├── components/      # Reusable UI components
+│   │   ├── pages/           # Application pages
+│   │   ├── services/        # API and workflow clients
+│   │   └── types/           # Frontend domain and API types
+│   └── package.json
+├── .env.example
+└── README.md
+```
+
+## Future direction
+
+The platform can evolve into a continuous career development system by incorporating portfolios, GitHub repositories, employer intelligence, adaptive mock interviews, and progress tracking.
 
 The long-term feedback loop is:
 
-> Assess → Identify Gaps → Recommend → Develop → Re-evaluate
+`Assess → Identify Gaps → Recommend → Develop → Re-evaluate`
 
-Ultimately, Career Copilot aims to help candidates understand where they are, where they want to go, and what they should do next to get there.
+
+
+
